@@ -1,0 +1,9 @@
+{
+  "settingsInheritedFrom": "whitesource-config/whitesource-config@infra-monorepo-config",
+  "scanSettings": {
+    "baseBranches": ["try-mend", "off-try-mend", "develop", "master", "trim-for-mend"]
+  },
+  "remediateSettings": {
+    "prHourlyLimit": 0
+  }
+}

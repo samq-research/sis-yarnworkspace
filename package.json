@@ -1,0 +1,31 @@
+{
+  "name": "shared-infra-modules",
+  "version": "1.0.0",
+  "description": "A monorepo to gather shared modules managed by the Infra team",
+  "main": "index.js",
+  "repository": "git@gitlab.sisense.com:SisenseTeam/Product/FE/shared-infra-modules.git",
+  "author": "Anatoly Katzman <anatoly.katzman@sisense.com>",
+  "license": "ISC",
+  "scripts": {
+    "lint": "npx nx run-many --target=lint",
+    "audit": "npx nx run-many --target=audit",
+    "unit-test": "npx nx run-many --target=unit-test"
+  },
+  "devDependencies": {
+    "husky": "^8.0.0",
+    "if-env": "^1.0.4",
+    "lerna": "^6.5.1",
+    "lint-staged": "^13.1.2",
+    "nx": "15.9.2",
+    "prettier": "^2.8.1"
+  },
+  "dependencies": {
+    "vm2": "3.9.15",
+    "handlebars": "4.7.3",
+    "moment": "^2.29.4"
+  },
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ]
+}

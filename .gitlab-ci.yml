@@ -1,0 +1,102 @@
+image: docker.sisense.com/sisense-dev-node:16.18.0
+
+default:
+  tags:
+    - build-nodejs
+
+variables:
+  GIT_SSL_NO_VERIFY: 'true'
+  GIT_STRATEGY: clone
+
+cache:
+  untracked: true
+  key: '$CI_COMMIT_REF_SLUG'
+  paths:
+    - node_modules
+
+stages:
+  - install # set up the environment
+  - check # static checks on the sources
+  - test # check the build results
+
+.common_before_script: &common_before_script |-
+  sudo chown -R $(whoami) .
+  yarn install --frozen-lockfile
+
+.look_around: &look_around |-
+  echo ========= looking around ======
+  set -v
+  echo Current working directory: $(pwd)
+  env
+  git --version
+  git remote -v
+  git status
+  git branch -a
+  git show-branch
+  git rev-parse --abbrev-ref HEAD
+  git log --graph --oneline --decorate -n20
+  set +v
+  echo ========= done looking around ======
+
+.distributed:
+  interruptible: true
+  cache:
+    key:
+      files:
+        - yarn.lock
+    paths:
+      - .npm/ # TODO: ?
+  before_script:
+    - *common_before_script
+  artifacts:
+    paths:
+      - node_modules/.cache/nx
+
+.configure_git: &configure_git |-
+  echo 'Git client is being configured...'
+  USER_NAME='release-bot'
+  git remote set-url origin "https://${USER_NAME}:${GITLAB_TOKEN}@gitlab.sisense.com/${CI_PROJECT_PATH}.git"
+  git config user.email "${USER_NAME}@sisense.com"
+  git config user.name "${USER_NAME}"
+  git fetch
+  git checkout "${CI_COMMIT_BRANCH}"
+  git status
+  echo 'Git client is configured successfully'
+
+.configure_release: &configure_release |-
+  VERSION_COMMIT_MSG="chore(release): bump version [skip ci]"
+  VERSION_QUALIFIER=$(. ./scripts/get-release-qualifier.sh "${CI_COMMIT_BRANCH}")
+
+.release_branches: &release_branches |- # regexp to match release branches, such as release/l2023.11
+  /^[Rr]elease\/[Ll][0-9]{4}\.[0-9]{1,2}$/
+
+install:
+  stage: install
+  script:
+    - sudo chown -R $(whoami) .
+    - *look_around
+    - echo This pipeline is triggered by a $CI_PIPELINE_SOURCE event
+    - yarn install
+
+lint:
+  stage: check
+  extends: .distributed
+  script:
+    - *look_around
+    - *configure_git
+    - *look_around
+    - yarn lint
+
+audit:
+  stage: check
+  extends: .distributed
+  script:
+    - *look_around
+    - yarn audit --groups dependencies
+  allow_failure: true
+
+unit-test:
+  stage: test
+  extends: .distributed
+  script:
+    - yarn unit-test
