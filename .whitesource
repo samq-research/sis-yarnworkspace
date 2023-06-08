@@ -1,5 +1,8 @@
 {
   "settingsInheritedFrom": "tabacmend-sandbox/whitesource-config@main",
+  "issueSettings": {
+    "issueType": "VULNERABILITY"
+  },
   "remediateSettings": {
     "prHourlyLimit": 0,
     "dependencyDashboard": false
