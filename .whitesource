@@ -1,9 +1,7 @@
 {
-  "settingsInheritedFrom": "whitesource-config/whitesource-config@infra-monorepo-config",
-  "scanSettings": {
-    "baseBranches": ["try-mend", "off-try-mend", "develop", "master", "trim-for-mend"]
-  },
+  "settingsInheritedFrom": "tabacmend-sandbox/whitesource-config@main",
   "remediateSettings": {
-    "prHourlyLimit": 0
+    "prHourlyLimit": 0,
+    "dependencyDashboard": false
   }
 }
