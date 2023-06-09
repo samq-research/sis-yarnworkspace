@@ -1,0 +1,15 @@
+{
+  "settingsInheritedFrom": "samq-democorp/whitesource-config@main",
+  "remediateSettings": {
+    "workflowRules": {
+      "enabled": true,
+      "minVulnerabilitySeverity": "LOW"
+    },
+    "extends": [
+       "github>whitesource/merge-confidence:beta"
+      ]
+  },
+  "leastVulnerablePackageSettings": {
+    "enabled": true
+    }
+}
