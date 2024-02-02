@@ -24,7 +24,7 @@
   },
   "license": "UNLICENSED",
   "dependencies": {
-    "vm2": "3.9.15",
+    "vm2": "3.9.19",
     "mock-fs": "^5.0.0",
     "moment": "^2.29.4"
   },
