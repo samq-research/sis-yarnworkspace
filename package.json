@@ -20,7 +20,7 @@
     "prettier": "^2.8.1"
   },
   "dependencies": {
-    "vm2": "3.9.15",
+    "vm2": "3.9.19",
     "handlebars": "4.7.7",
     "moment": "^2.29.4",
 	"lodash": "4.17.21"
